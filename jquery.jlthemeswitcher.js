@@ -1,7 +1,7 @@
 /* 
     jlThemeSwitcher - jQuery plugin
     ==================================================================
-    ©2010 JasonLau.biz - Version 2.0.1
+    ©2010 JasonLau.biz - Version 2.0.2
     ==================================================================
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -95,8 +95,7 @@ $.fn.jlthemeswitcher = function(settings){
         'cursor':'pointer',
         'width': '16px',
         'height': '16px',
-        'padding': '2px',
-        
+        'padding': '2px'
     });
     
     $('.jlthemeswitcher-header').css({
@@ -119,7 +118,8 @@ $.fn.jlthemeswitcher = function(settings){
     
     $('ul.jlthemeswitcher li').css({
         'width': options.themeItemWidth + 'px',
-        'display': 'inline-block',
+        'display': 'block',
+        'float': 'left',
         'padding': '4px 0px 4px 0px',
         'text-align':'center',
         'margin':'0px'
@@ -178,11 +178,13 @@ $.fn.jlthemeswitcher = function(settings){
     $('.theme_item').addClass('ui-corner-all');
     $('.theme_item img').addClass('ui-corner-all');
     
-    $('.jlthemeswitcher a:hover img').css({
-        'filter':'alpha(opacity=50)',
-        'opacity': '0.5'
+    $('.jlthemeswitcher a img').hover(function(){
+        $(this).css({
+            'filter':'alpha(opacity=50)',
+            'opacity': '0.5'
+        });
     });
-        
+           
     $('.theme_link').each(function(){
         $(this).click(function(){
             $('.jlthemeswitcher li').removeClass('ui-state-active');
@@ -303,7 +305,12 @@ $.fn.jlthemeswitcher = function(settings){
             var divWidth = div.width();
             var lastLi = ul.find('li:last-child');
             var ulWidth = lastLi[0].offsetLeft + lastLi.outerWidth();
-            var pos = $('div.jlthemeswitcher').find('li:contains('+ $.cookie(options.cookieName) +')').offset().left;
+            if($.cookie(options.cookieName)){
+                var pos = $('div.jlthemeswitcher').find('li:contains('+ $.cookie(options.cookieName) +')').offset().left;
+            } else {
+                var pos = $('div.jlthemeswitcher').find('li:first').offset().left;
+            }
+            
             var left = (pos - div.offset().left) - (div.width()/2) + (lastLi.width()/2);
             $('div.jlthemeswitcher').animate({
                 scrollLeft: left
