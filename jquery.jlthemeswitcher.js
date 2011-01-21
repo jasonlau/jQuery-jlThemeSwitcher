@@ -1,7 +1,7 @@
 /* 
     jlThemeSwitcher - jQuery plugin
     ==================================================================
-    ©2010 JasonLau.biz - Version 2.0.2
+    ©2010 JasonLau.biz - Version 2.0.3
     ==================================================================
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ $.fn.jlthemeswitcher = function(settings){
        hoverText: false,
        importThemes: true,
        importThemesPath: 'http://jasonlau.biz/public/themes.run',
+       noHeader: false,
        onClose: function(){},
        onOpen: function(){},
        onSelect: function(){},
@@ -82,7 +83,8 @@ $.fn.jlthemeswitcher = function(settings){
         
     }
     content += '</ul></div></div>\n';
-	obj.append(content);   
+    
+	obj.append(content);
     
     $('.jlthemeswitcher-container').css({
         'width': options.width,
@@ -108,6 +110,8 @@ $.fn.jlthemeswitcher = function(settings){
     $('.jlthemeswitcher-title').css({
         'float': 'left'       
     });
+    
+    if(options.noHeader) $('.jlthemeswitcher-header').remove();
        
     $('div.jlthemeswitcher').css({
         'padding': '2px',
