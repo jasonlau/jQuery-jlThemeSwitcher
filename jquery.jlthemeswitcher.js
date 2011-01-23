@@ -1,7 +1,7 @@
 /* 
     jlThemeSwitcher - jQuery plugin
     ==================================================================
-    ©2010 JasonLau.biz - Version 2.0.3
+    ©2010 JasonLau.biz - Version 2.0.4
     ==================================================================
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,14 +20,41 @@
 $.fn.jlthemeswitcher = function(settings){
 	var options = jQuery.extend({
 	   autoOpen: false,
-       bgClass: 'ui-widget-content',
+       bgClass: '', // depreciated in 2.0.4 use contentClass instead
+       captionCSS: {
+        'display': 'block',
+        'margin-top': '3px',
+        'text-align': 'center',
+        'font-size': '12px'
+       }, // 2.0.4
        closeIcon: true,
+       closeIconContainerClass: 'ui-state-default ui-corner-all', // 2.0.4
+       closeIconClass: 'ui-icon-circle-close', // 2.0.4
+       closeIconCSS: {
+        'float': 'right',
+        'cursor':'pointer',
+        'width': '16px',
+        'height': '16px',
+        'padding': '2px'
+       }, // 2.0.4      
        closeOnClick: true,
+       contentClass: 'ui-widget-content ui-corner-bl ui-corner-br',
        cookieName: 'jlthemeswitcher-theme',
        cookieOptions: {expires:365},
        defaultTheme: '',
        excludeThemes: '',
+       headerClass: 'ui-widget-header ui-corner-tl ui-corner-tr', // 2.0.4
+       headerCSS: {
+        'padding': '2px 4px 0px 0px',
+        'height': '22px',
+        'margin': '0px auto',
+        'width': '100%'
+       }, // 2.0.4
        hoverText: false,
+       imageHoverCSS: {
+        'filter':'alpha(opacity=50)',
+        'opacity': '0.5'
+       }, // 2.0.4
        importThemes: true,
        importThemesPath: 'http://jasonlau.biz/public/themes.run',
        noHeader: false,
@@ -35,10 +62,30 @@ $.fn.jlthemeswitcher = function(settings){
        onOpen: function(){},
        onSelect: function(){},
        openAtOpener: false,
-       themeItemWidth: 82,
+       themeItemClass: 'ui-corner-all', // 2.0.4
+       themeItemActiveClass: 'ui-state-active', // 2.0.4
+       themeItemCSS: {
+        'width': '82px',
+        'display': 'block',
+        'float': 'left',
+        'padding': '4px 0px 4px 0px',
+        'text-align':'center',
+        'margin':'0px'
+       }, // 2.0.4
+       themeItemImageClass: 'ui-corner-all', // 2.0.4
+       themeItemWidth: 82, // depreciated in 2.0.4 use themeItemCSS instead
        themePreview: true,
 	   themes: '',
+       themeswitcherCSS: {
+        'padding': '2px',
+        'width': '100%',
+        'overflow': 'hidden',
+        'margin':'0px auto'
+       }, // 2.0.4
        title: 'Theme Switcher',
+       titleCSS: {
+        'float': 'left'
+       }, // 2.0.4
        width: '300px',     
        zindex: 2147483647
        }, settings);   
@@ -72,9 +119,9 @@ $.fn.jlthemeswitcher = function(settings){
     themes = themes.split('|');
     var cicon = '';
     if(options.closeIcon){
-        cicon = '<div class="jlthemeswitcher-closer jlthemeswitcher-close-icon ui-state-default ui-corner-all"><span class="ui-icon ui-icon-circle-close" title="Close"></span></div>';
+        cicon = '<div class="jlthemeswitcher-closer jlthemeswitcher-close-icon '+options.closeIconContainerClass+'"><span class="ui-icon '+options.closeIconClass+'" title="Close"></span></div>';
     }
-    var content = '<div class="jlthemeswitcher-container"><div class="jlthemeswitcher-header"><div class="jlthemeswitcher-title">&nbsp;' + options.title + '</div>' + cicon + '</div><div class="jlthemeswitcher ' + options.bgClass + ' ui-corner-bl ui-corner-br"><ul class="jlthemeswitcher">\n';
+    var content = '<div class="jlthemeswitcher-container"><div class="jlthemeswitcher-header"><div class="jlthemeswitcher-title">&nbsp;' + options.title + '</div>' + cicon + '</div><div class="jlthemeswitcher ' + options.contentClass + '"><ul class="jlthemeswitcher">\n';
     for(var i in themes){
         var themedata = themes[i].split(',');
         if($.inArray(themedata[0],excludeThemes) == -1){
@@ -91,46 +138,20 @@ $.fn.jlthemeswitcher = function(settings){
         'z-index': options.zindex
     });
      
-    $('.jlthemeswitcher-header').addClass('ui-widget-header ui-corner-tl ui-corner-tr');
-    $('.jlthemeswitcher-close-icon').css({
-        'float': 'right',
-        'cursor':'pointer',
-        'width': '16px',
-        'height': '16px',
-        'padding': '2px'
-    });
+    $('.jlthemeswitcher-header').addClass(options.headerClass);
+    $('.jlthemeswitcher-close-icon').css(options.closeIconCSS);
     
-    $('.jlthemeswitcher-header').css({
-        'padding': '2px 4px 0px 0px',
-        'height': '22px',
-        'margin': '0px auto',
-        'width': '100%'     
-    });
+    $('.jlthemeswitcher-header').css(options.headerCSS);
     
-    $('.jlthemeswitcher-title').css({
-        'float': 'left'       
-    });
+    $('.jlthemeswitcher-title').css(options.titleCSS);
     
     if(options.noHeader) $('.jlthemeswitcher-header').remove();
        
-    $('div.jlthemeswitcher').css({
-        'padding': '2px',
-        'width': '100%',
-        'overflow': 'hidden',
-        'margin':'0px auto'
-    });  
+    $('div.jlthemeswitcher').css(options.themeswitcherCSS);  
     
-    $('ul.jlthemeswitcher li').css({
-        'width': options.themeItemWidth + 'px',
-        'display': 'block',
-        'float': 'left',
-        'padding': '4px 0px 4px 0px',
-        'text-align':'center',
-        'margin':'0px'
-    });
+    $('ul.jlthemeswitcher li').css(options.themeItemCSS);
     
     var liWidth = options.themeItemWidth*(themes.length+2);
-
     $('ul.jlthemeswitcher').css({
         'width': liWidth,
         'margin': '0px',
@@ -143,12 +164,7 @@ $.fn.jlthemeswitcher = function(settings){
         'text-decoration': 'none'
     });    
     
-    $('.jlthemeswitcher span').css({
-        'display': 'block',
-        'margin-top': '3px',
-        'text-align': 'center',
-        'font-size': '12px'
-    });
+    $('.jlthemeswitcher span').css(options.captionCSS);
     
     if(options.hoverText){
         $('.jlthemeswitcher span').css({
@@ -179,20 +195,17 @@ $.fn.jlthemeswitcher = function(settings){
         }      
     });
     
-    $('.theme_item').addClass('ui-corner-all');
-    $('.theme_item img').addClass('ui-corner-all');
+    $('.theme_item').addClass(options.themeItemClass);
+    $('.theme_item img').addClass(options.themeItemImageClass);
     
     $('.jlthemeswitcher a img').hover(function(){
-        $(this).css({
-            'filter':'alpha(opacity=50)',
-            'opacity': '0.5'
-        });
+        $(this).css(options.imageHoverCSS);
     });
            
     $('.theme_link').each(function(){
         $(this).click(function(){
-            $('.jlthemeswitcher li').removeClass('ui-state-active');
-            $(this).parent().addClass('ui-state-active');
+            $('.jlthemeswitcher li').removeClass(options.themeItemActiveClass);
+            $(this).parent().addClass(themeItemActiveClass);
             switchTheme($(this).attr('rel'),$(this).attr('title'));
             if(options.closeOnClick){
                 $('.jlthemeswitcher-container').slideUp('slow');
@@ -215,7 +228,6 @@ $.fn.jlthemeswitcher = function(settings){
     var divWidth = div.width();
     div.css({overflow: 'hidden'});
     var lastLi = ul.find('li:last-child');
-    $("#debug").show();
     div.mousemove(function(e){
         var ulWidth = lastLi[0].offsetLeft + lastLi.outerWidth();
         var left = (e.pageX - div.offset().left) * (ulWidth-divWidth) / divWidth;
