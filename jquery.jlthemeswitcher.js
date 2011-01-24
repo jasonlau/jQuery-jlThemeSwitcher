@@ -1,7 +1,7 @@
 /* 
     jlThemeSwitcher - jQuery plugin
     ==================================================================
-    ©2010 JasonLau.biz - Version 2.0.4
+    ©2010 JasonLau.biz - Version 2.0.5
     ==================================================================
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -205,7 +205,7 @@ $.fn.jlthemeswitcher = function(settings){
     $('.theme_link').each(function(){
         $(this).click(function(){
             $('.jlthemeswitcher li').removeClass(options.themeItemActiveClass);
-            $(this).parent().addClass(themeItemActiveClass);
+            $(this).parent().addClass(options.themeItemActiveClass);
             switchTheme($(this).attr('rel'),$(this).attr('title'));
             if(options.closeOnClick){
                 $('.jlthemeswitcher-container').slideUp('slow');
